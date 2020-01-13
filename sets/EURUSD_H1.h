@@ -12,15 +12,12 @@ struct Stg_HeikinAshi_EURUSD_H1_Params : Stg_HeikinAshi_Params {
     HeikinAshi_Period = 2;
     HeikinAshi_Applied_Price = 3;
     HeikinAshi_Shift = 0;
-    HeikinAshi_TrailingStopMethod = 6;
-    HeikinAshi_TrailingProfitMethod = 11;
+    HeikinAshi_SignalOpenMethod = 0;
     HeikinAshi_SignalOpenLevel = 36;
-    HeikinAshi_SignalBaseMethod = 0;
-    HeikinAshi_SignalOpenMethod1 = 195;
-    HeikinAshi_SignalOpenMethod2 = 0;
+    HeikinAshi_SignalCloseMethod = 1;
     HeikinAshi_SignalCloseLevel = 36;
-    HeikinAshi_SignalCloseMethod1 = 1;
-    HeikinAshi_SignalCloseMethod2 = 0;
+    HeikinAshi_PriceLimitMethod = 0;
+    HeikinAshi_PriceLimitLevel = 0;
     HeikinAshi_MaxSpread = 6;
   }
 };
