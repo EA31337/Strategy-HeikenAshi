@@ -65,9 +65,9 @@ struct Stg_HeikinAshi_Params : Stg_Params {
 #include "sets/EURUSD_M30.h"
 #include "sets/EURUSD_M5.h"
 
-class HeikinAshi : public Strategy {
+class Stg_HeikinAshi : public Strategy {
  public:
-  Stg_HeikenAshi(StgParams &_params, string _name) : Strategy(_params, _name) {}
+  Stg_HeikinAshi(StgParams &_params, string _name) : Strategy(_params, _name) {}
 
   static Stg_HeikinAshi *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
@@ -100,9 +100,9 @@ class HeikinAshi : public Strategy {
     }
     // Initialize strategy parameters.
     ChartParams cparams(_tf);
-    HeikinAshi_Params adx_params(_params.HeikinAshi_Period, _params.HeikinAshi_Applied_Price);
-    IndicatorParams adx_iparams(10, INDI_HeikinAshi);
-    StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikinAshi(adx_params, adx_iparams, cparams), NULL, NULL);
+    HeikinAshi_Params ha_params(_params.HeikinAshi_Period, _params.HeikinAshi_Applied_Price);
+    IndicatorParams ha_iparams(10, INDI_HEIKINASHI);
+    StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikinAshi(ha_params, ha_iparams, cparams), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.HeikinAshi_SignalOpenMethod, _params.HeikinAshi_SignalOpenMethod,
@@ -116,6 +116,7 @@ class HeikinAshi : public Strategy {
   /**
    * Update indicator values.
    */
+  /*
   bool Update(int tf = EMPTY) {
     // Calculates the Average True Range indicator.
     ratio = tf == 30 ? 1.0 : fmax(HeikinAshi_Period_Ratio, NEAR_ZERO) / tf * 30;
@@ -124,6 +125,7 @@ class HeikinAshi : public Strategy {
       ha[index][i][SLOW] = iHeikinAshi(symbol, tf, (int)(HeikinAshi_Period_Slow * ratio), i);
     }
   }
+  */
 
   /**
    * Check strategy's opening signal.
