@@ -5,19 +5,19 @@
 //+------------------------------------------------------------------+
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_HeikinAshi_EURUSD_M30_Params : Stg_HeikinAshi_Params {
-  Stg_HeikinAshi_EURUSD_M30_Params() {
+struct Stg_HeikenAshi_EURUSD_M30_Params : Stg_HeikenAshi_Params {
+  Stg_HeikenAshi_EURUSD_M30_Params() {
     symbol = "EURUSD";
     tf = PERIOD_M30;
-    HeikinAshi_Period = 2;
-    HeikinAshi_Applied_Price = 3;
-    HeikinAshi_Shift = 0;
-    HeikinAshi_SignalOpenMethod = 0;
-    HeikinAshi_SignalOpenLevel = 36;
-    HeikinAshi_SignalCloseMethod = 1;
-    HeikinAshi_SignalCloseLevel = 36;
-    HeikinAshi_PriceLimitMethod = 0;
-    HeikinAshi_PriceLimitLevel = 0;
-    HeikinAshi_MaxSpread = 5;
+    HeikenAshi_Period = 2;
+    HeikenAshi_Applied_Price = 3;
+    HeikenAshi_Shift = 0;
+    HeikenAshi_SignalOpenMethod = 0;
+    HeikenAshi_SignalOpenLevel = 36;
+    HeikenAshi_SignalCloseMethod = 1;
+    HeikenAshi_SignalCloseLevel = 36;
+    HeikenAshi_PriceLimitMethod = 0;
+    HeikenAshi_PriceLimitLevel = 0;
+    HeikenAshi_MaxSpread = 5;
   }
 };

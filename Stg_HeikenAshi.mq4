@@ -6,8 +6,8 @@
 
 /**
  * @file
- * Implements HeikinAshi strategy.
+ * Implements HeikenAshi strategy.
  */
 
 // Includes the main code.
-#include "Stg_HeikinAshi.mq5"
+#include "Stg_HeikenAshi.mq5"

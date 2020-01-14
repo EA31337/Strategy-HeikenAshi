@@ -6,7 +6,7 @@
 
 /**
  * @file
- * Implements HeikinAshi strategy.
+ * Implements HeikenAshi strategy.
  */
 
 // Includes EA31337 framework.
@@ -18,13 +18,13 @@ input ENUM_LOG_LEVEL Log_Level = V_INFO;  // Log level.
 input bool Info_On_Chart = true;          // Display info on chart.
 
 // Includes strategy.
-#include "Stg_HeikinAshi.mqh"
+#include "Stg_HeikenAshi.mqh"
 
 // Defines.
-#define ea_name "Stg_HeikinAshi"
+#define ea_name "Stg_HeikenAshi"
 #define ea_version "1.000"
 #define ea_desc "Multi-strategy advanced trading robot"
-#define ea_link "https://github.com/EA31337/Strategy-HeikinAshi"
+#define ea_link "https://github.com/EA31337/Strategy-HeikenAshi"
 #define ea_author "kenorb"
 
 // Properties.
@@ -51,7 +51,7 @@ int OnInit() {
   EAParams ea_params(__FILE__, Log_Level);
   ea_params.SetChartInfoFreq(Info_On_Chart ? 2 : 0);
   ea = new EA(ea_params);
-  _result &= ea.StrategyAdd<Stg_HeikinAshi>(Active_Tfs);
+  _result &= ea.StrategyAdd<Stg_HeikenAshi>(Active_Tfs);
   return (_result ? INIT_SUCCEEDED : INIT_FAILED);
 }
 

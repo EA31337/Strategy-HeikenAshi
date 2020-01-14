@@ -1,2 +1,2 @@
-# Strategy-HeikinAshi
-Strategy based on the Heikin Ashi candlesticks.
+# Strategy-HeikenAshi
+Strategy based on the Heiken Ashi candlesticks.
