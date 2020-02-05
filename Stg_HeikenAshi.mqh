@@ -20,6 +20,8 @@ INPUT ENUM_APPLIED_PRICE HeikenAshi_Applied_Price = PRICE_HIGH;               //
 INPUT int HeikenAshi_Shift = 0;                     // Shift (relative to the current bar, 0 - default)
 INPUT int HeikenAshi_SignalOpenMethod = 0;          // Signal open method (0-1)
 INPUT double HeikenAshi_SignalOpenLevel = 0.0004;   // Signal open level (>0.0001)
+INPUT int HeikenAshi_SignalOpenFilterMethod = 0;                       // Signal open filter method
+INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                        // Signal open boost method
 INPUT int HeikenAshi_SignalCloseMethod = 0;         // Signal close method
 INPUT double HeikenAshi_SignalCloseLevel = 0.0004;  // Signal close level (>0.0001)
 INPUT int HeikenAshi_PriceLimitMethod = 0;          // Price limit method
@@ -33,6 +35,8 @@ struct Stg_HeikenAshi_Params : Stg_Params {
   int HeikenAshi_Shift;
   int HeikenAshi_SignalOpenMethod;
   double HeikenAshi_SignalOpenLevel;
+  int HeikenAshi_SignalOpenFilterMethod;
+  int HeikenAshi_SignalOpenBoostMethod;
   int HeikenAshi_SignalCloseMethod;
   double HeikenAshi_SignalCloseLevel;
   int HeikenAshi_PriceLimitMethod;
@@ -46,6 +50,8 @@ struct Stg_HeikenAshi_Params : Stg_Params {
         HeikenAshi_Shift(::HeikenAshi_Shift),
         HeikenAshi_SignalOpenMethod(::HeikenAshi_SignalOpenMethod),
         HeikenAshi_SignalOpenLevel(::HeikenAshi_SignalOpenLevel),
+        HeikenAshi_SignalOpenFilterMethod(::HeikenAshi_SignalOpenFilterMethod),
+        HeikenAshi_SignalOpenBoostMethod(::HeikenAshi_SignalOpenBoostMethod),
         HeikenAshi_SignalCloseMethod(::HeikenAshi_SignalCloseMethod),
         HeikenAshi_SignalCloseLevel(::HeikenAshi_SignalCloseLevel),
         HeikenAshi_PriceLimitMethod(::HeikenAshi_PriceLimitMethod),
@@ -100,7 +106,7 @@ class Stg_HeikenAshi : public Strategy {
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikenAshi(ha_iparams, cparams), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
-    sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,
+    sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,_params.HeikenAshi_SignalOpenFilterMethod,_params.HeikenAshi_SignalOpenBoostMethod,
                        _params.HeikenAshi_SignalCloseMethod, _params.HeikenAshi_SignalCloseMethod);
     sparams.SetMaxSpread(_params.HeikenAshi_MaxSpread);
     // Initialize strategy instance.
@@ -166,6 +172,38 @@ class Stg_HeikenAshi : public Strategy {
   }
 
   /**
+   * Check strategy's opening signal additional filter.
+   */
+  bool SignalOpenFilter(ENUM_ORDER_TYPE _cmd, int _method = 0) {
+    bool _result = true;
+    if (_method != 0) {
+      // if (METHOD(_method, 0)) _result &= Trade().IsTrend(_cmd);
+      // if (METHOD(_method, 1)) _result &= Trade().IsPivot(_cmd);
+      // if (METHOD(_method, 2)) _result &= Trade().IsPeakHours(_cmd);
+      // if (METHOD(_method, 3)) _result &= Trade().IsRoundNumber(_cmd);
+      // if (METHOD(_method, 4)) _result &= Trade().IsHedging(_cmd);
+      // if (METHOD(_method, 5)) _result &= Trade().IsPeakBar(_cmd);
+    }
+    return _result;
+  }
+
+  /**
+   * Gets strategy's lot size boost (when enabled).
+   */
+  double SignalOpenBoost(ENUM_ORDER_TYPE _cmd, int _method = 0) {
+    bool _result = 1.0;
+    if (_method != 0) {
+      // if (METHOD(_method, 0)) if (Trade().IsTrend(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 1)) if (Trade().IsPivot(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 2)) if (Trade().IsPeakHours(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 3)) if (Trade().IsRoundNumber(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 4)) if (Trade().IsHedging(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 5)) if (Trade().IsPeakBar(_cmd)) _result *= 1.1;
+    }
+    return _result;
+  }
+
+  /**
    * Check strategy's closing signal.
    */
   bool SignalClose(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
@@ -175,9 +213,9 @@ class Stg_HeikenAshi : public Strategy {
   /**
    * Gets price limit value for profit take or stop loss.
    */
-  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_STG_PRICE_LIMIT_MODE _mode, int _method = 0, double _level = 0.0) {
+  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, double _level = 0.0) {
     double _trail = _level * Market().GetPipSize();
-    int _direction = Order::OrderDirection(_cmd) * (_mode == LIMIT_VALUE_STOP ? -1 : 1);
+    int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
     switch (_method) {
