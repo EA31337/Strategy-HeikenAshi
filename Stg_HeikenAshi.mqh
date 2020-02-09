@@ -20,8 +20,8 @@ INPUT ENUM_APPLIED_PRICE HeikenAshi_Applied_Price = PRICE_HIGH;               //
 INPUT int HeikenAshi_Shift = 0;                     // Shift (relative to the current bar, 0 - default)
 INPUT int HeikenAshi_SignalOpenMethod = 0;          // Signal open method (0-1)
 INPUT double HeikenAshi_SignalOpenLevel = 0.0004;   // Signal open level (>0.0001)
-INPUT int HeikenAshi_SignalOpenFilterMethod = 0;                       // Signal open filter method
-INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                        // Signal open boost method
+INPUT int HeikenAshi_SignalOpenFilterMethod = 0;    // Signal open filter method
+INPUT int HeikenAshi_SignalOpenBoostMethod = 0;     // Signal open boost method
 INPUT int HeikenAshi_SignalCloseMethod = 0;         // Signal close method
 INPUT double HeikenAshi_SignalCloseLevel = 0.0004;  // Signal close level (>0.0001)
 INPUT int HeikenAshi_PriceLimitMethod = 0;          // Price limit method
@@ -74,31 +74,9 @@ class Stg_HeikenAshi : public Strategy {
   static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
     Stg_HeikenAshi_Params _params;
-    switch (_tf) {
-      case PERIOD_M1: {
-        Stg_HeikenAshi_EURUSD_M1_Params _new_params;
-        _params = _new_params;
-      }
-      case PERIOD_M5: {
-        Stg_HeikenAshi_EURUSD_M5_Params _new_params;
-        _params = _new_params;
-      }
-      case PERIOD_M15: {
-        Stg_HeikenAshi_EURUSD_M15_Params _new_params;
-        _params = _new_params;
-      }
-      case PERIOD_M30: {
-        Stg_HeikenAshi_EURUSD_M30_Params _new_params;
-        _params = _new_params;
-      }
-      case PERIOD_H1: {
-        Stg_HeikenAshi_EURUSD_H1_Params _new_params;
-        _params = _new_params;
-      }
-      case PERIOD_H4: {
-        Stg_HeikenAshi_EURUSD_H4_Params _new_params;
-        _params = _new_params;
-      }
+    if (!Terminal::IsOptimization()) {
+      SetParamsByTf<Stg_HeikenAshi_Params>(_params, _tf, stg_ha_m1, stg_ha_m5, stg_ha_m15, stg_ha_m30, stg_ha_h1,
+                                           stg_ha_h4, stg_ha_h4);
     }
     // Initialize strategy parameters.
     ChartParams cparams(_tf);
@@ -106,7 +84,8 @@ class Stg_HeikenAshi : public Strategy {
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikenAshi(ha_iparams, cparams), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
-    sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,_params.HeikenAshi_SignalOpenFilterMethod,_params.HeikenAshi_SignalOpenBoostMethod,
+    sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,
+                       _params.HeikenAshi_SignalOpenFilterMethod, _params.HeikenAshi_SignalOpenBoostMethod,
                        _params.HeikenAshi_SignalCloseMethod, _params.HeikenAshi_SignalCloseMethod);
     sparams.SetMaxSpread(_params.HeikenAshi_MaxSpread);
     // Initialize strategy instance.

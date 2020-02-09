@@ -20,4 +20,4 @@ struct Stg_HeikenAshi_EURUSD_H4_Params : Stg_HeikenAshi_Params {
     HeikenAshi_PriceLimitLevel = 0;
     HeikenAshi_MaxSpread = 10;
   }
-};
+} stg_ha_h4;
