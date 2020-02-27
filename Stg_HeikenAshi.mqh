@@ -29,7 +29,7 @@ INPUT double HeikenAshi_PriceLimitLevel = 0;        // Price limit level
 INPUT double HeikenAshi_MaxSpread = 6.0;            // Max spread to trade (pips)
 
 // Struct to define strategy parameters to override.
-struct Stg_HeikenAshi_Params : Stg_Params {
+struct Stg_HeikenAshi_Params : StgParams {
   unsigned int HeikenAshi_Period;
   ENUM_APPLIED_PRICE HeikenAshi_Applied_Price;
   int HeikenAshi_Shift;
@@ -79,9 +79,8 @@ class Stg_HeikenAshi : public Strategy {
                                            stg_ha_h4, stg_ha_h4);
     }
     // Initialize strategy parameters.
-    ChartParams cparams(_tf);
-    IndicatorParams ha_iparams(10, INDI_HEIKENASHI);
-    StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikenAshi(ha_iparams, cparams), NULL, NULL);
+    HeikenAshiParams ha_params(_tf);
+    StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikenAshi(ha_params), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,
