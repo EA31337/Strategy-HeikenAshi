@@ -89,6 +89,7 @@ class Stg_HeikenAshi : public Strategy {
     sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,
                        _params.HeikenAshi_SignalOpenFilterMethod, _params.HeikenAshi_SignalOpenBoostMethod,
                        _params.HeikenAshi_SignalCloseMethod, _params.HeikenAshi_SignalCloseMethod);
+    sparams.SetPriceLimits(_params.HeikenAshi_PriceLimitMethod, _params.HeikenAshi_PriceLimitLevel);
     sparams.SetMaxSpread(_params.HeikenAshi_MaxSpread);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_HeikenAshi(sparams, "HeikenAshi");
