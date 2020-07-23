@@ -84,7 +84,7 @@ class Stg_HeikenAshi : public Strategy {
     // Initialize strategy parameters.
     HeikenAshiParams ha_params(_tf);
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_HeikenAshi(ha_params), NULL, NULL);
-    sparams.logger.SetLevel(_log_level);
+    sparams.logger.Ptr().SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.HeikenAshi_SignalOpenMethod, _params.HeikenAshi_SignalOpenMethod,
                        _params.HeikenAshi_SignalOpenFilterMethod, _params.HeikenAshi_SignalOpenBoostMethod,
