@@ -3,24 +3,24 @@
  * Implements HeikenAshi strategy based on the Average True Range indicator (Heiken Ashi).
  */
 
+// Includes.
+#include <EA31337-classes/Indicators/Indi_HeikenAshi.mqh>
+#include <EA31337-classes/Strategy.mqh>
+
 // User input params.
 INPUT int HeikenAshi_Period = 14;                                // Averaging period
 INPUT ENUM_APPLIED_PRICE HeikenAshi_Applied_Price = PRICE_HIGH;  // Applied price.
 INPUT ENUM_HA_MODE HeikenAshi_Mode = HA_HIGH;                    // HA mode
 INPUT int HeikenAshi_Shift = 0;                                  // Shift (relative to the current bar, 0 - default)
 INPUT int HeikenAshi_SignalOpenMethod = 0;                       // Signal open method (0-1)
-INPUT float HeikenAshi_SignalOpenLevel = 0.0004;                // Signal open level (>0.0001)
+INPUT float HeikenAshi_SignalOpenLevel = 0.0004f;                // Signal open level (>0.0001)
 INPUT int HeikenAshi_SignalOpenFilterMethod = 0;                 // Signal open filter method
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                  // Signal open boost method
 INPUT int HeikenAshi_SignalCloseMethod = 0;                      // Signal close method
-INPUT float HeikenAshi_SignalCloseLevel = 0.0004;               // Signal close level (>0.0001)
+INPUT float HeikenAshi_SignalCloseLevel = 0.0004f;               // Signal close level (>0.0001)
 INPUT int HeikenAshi_PriceLimitMethod = 0;                       // Price limit method
-INPUT float HeikenAshi_PriceLimitLevel = 0;                     // Price limit level
-INPUT float HeikenAshi_MaxSpread = 6.0;                         // Max spread to trade (pips)
-
-// Includes.
-#include <EA31337-classes/Indicators/Indi_HeikenAshi.mqh>
-#include <EA31337-classes/Strategy.mqh>
+INPUT float HeikenAshi_PriceLimitLevel = 0;                      // Price limit level
+INPUT float HeikenAshi_MaxSpread = 6.0;                          // Max spread to trade (pips)
 
 // Struct to define strategy parameters to override.
 struct Stg_HeikenAshi_Params : StgParams {
@@ -29,14 +29,14 @@ struct Stg_HeikenAshi_Params : StgParams {
   ENUM_HA_MODE HeikenAshi_Mode;
   int HeikenAshi_Shift;
   int HeikenAshi_SignalOpenMethod;
-  double HeikenAshi_SignalOpenLevel;
+  float HeikenAshi_SignalOpenLevel;
   int HeikenAshi_SignalOpenFilterMethod;
   int HeikenAshi_SignalOpenBoostMethod;
   int HeikenAshi_SignalCloseMethod;
-  double HeikenAshi_SignalCloseLevel;
+  float HeikenAshi_SignalCloseLevel;
   int HeikenAshi_PriceLimitMethod;
-  double HeikenAshi_PriceLimitLevel;
-  double HeikenAshi_MaxSpread;
+  float HeikenAshi_PriceLimitLevel;
+  float HeikenAshi_MaxSpread;
 
   // Constructor: Set default param values.
   Stg_HeikenAshi_Params()
@@ -190,6 +190,6 @@ class Stg_HeikenAshi : public Strategy {
         break;
       }
     }
-    return _result;
+    return (float)_result;
   }
 };
