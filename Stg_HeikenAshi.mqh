@@ -1,33 +1,26 @@
-//+------------------------------------------------------------------+
-//|                  EA31337 - multi-strategy advanced trading robot |
-//|                       Copyright 2016-2020, 31337 Investments Ltd |
-//|                                       https://github.com/EA31337 |
-//+------------------------------------------------------------------+
-
 /**
  * @file
  * Implements HeikenAshi strategy based on the Average True Range indicator (Heiken Ashi).
  */
 
+// User input params.
+INPUT int HeikenAshi_Period = 14;                                // Averaging period
+INPUT ENUM_APPLIED_PRICE HeikenAshi_Applied_Price = PRICE_HIGH;  // Applied price.
+INPUT ENUM_HA_MODE HeikenAshi_Mode = HA_HIGH;                    // HA mode
+INPUT int HeikenAshi_Shift = 0;                                  // Shift (relative to the current bar, 0 - default)
+INPUT int HeikenAshi_SignalOpenMethod = 0;                       // Signal open method (0-1)
+INPUT float HeikenAshi_SignalOpenLevel = 0.0004;                // Signal open level (>0.0001)
+INPUT int HeikenAshi_SignalOpenFilterMethod = 0;                 // Signal open filter method
+INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                  // Signal open boost method
+INPUT int HeikenAshi_SignalCloseMethod = 0;                      // Signal close method
+INPUT float HeikenAshi_SignalCloseLevel = 0.0004;               // Signal close level (>0.0001)
+INPUT int HeikenAshi_PriceLimitMethod = 0;                       // Price limit method
+INPUT float HeikenAshi_PriceLimitLevel = 0;                     // Price limit level
+INPUT float HeikenAshi_MaxSpread = 6.0;                         // Max spread to trade (pips)
+
 // Includes.
 #include <EA31337-classes/Indicators/Indi_HeikenAshi.mqh>
 #include <EA31337-classes/Strategy.mqh>
-
-// User input params.
-INPUT string __HeikenAshi_Parameters__ = "-- HeikenAshi strategy params --";  // >>> HeikenAshi <<<
-INPUT int HeikenAshi_Period = 14;                                             // Averaging period
-INPUT ENUM_APPLIED_PRICE HeikenAshi_Applied_Price = PRICE_HIGH;               // Applied price.
-INPUT ENUM_HA_MODE HeikenAshi_Mode = HA_HIGH;       // HA mode
-INPUT int HeikenAshi_Shift = 0;                     // Shift (relative to the current bar, 0 - default)
-INPUT int HeikenAshi_SignalOpenMethod = 0;          // Signal open method (0-1)
-INPUT double HeikenAshi_SignalOpenLevel = 0.0004;   // Signal open level (>0.0001)
-INPUT int HeikenAshi_SignalOpenFilterMethod = 0;    // Signal open filter method
-INPUT int HeikenAshi_SignalOpenBoostMethod = 0;     // Signal open boost method
-INPUT int HeikenAshi_SignalCloseMethod = 0;         // Signal close method
-INPUT double HeikenAshi_SignalCloseLevel = 0.0004;  // Signal close level (>0.0001)
-INPUT int HeikenAshi_PriceLimitMethod = 0;          // Price limit method
-INPUT double HeikenAshi_PriceLimitLevel = 0;        // Price limit level
-INPUT double HeikenAshi_MaxSpread = 6.0;            // Max spread to trade (pips)
 
 // Struct to define strategy parameters to override.
 struct Stg_HeikenAshi_Params : StgParams {
@@ -113,7 +106,7 @@ class Stg_HeikenAshi : public Strategy {
   /**
    * Check strategy's opening signal.
    */
-  bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
+  bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0) {
     Indi_HeikenAshi *_indi = Data();
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
     bool _result = _is_valid;
@@ -121,22 +114,48 @@ class Stg_HeikenAshi : public Strategy {
     if (_is_valid) {
       switch (_cmd) {
         case ORDER_TYPE_BUY:
-          _result = _indi[CURR].value[HeikenAshi_Mode] > _indi[PREV].value[HeikenAshi_Mode] + _level_pips; // @todo: Add _level_pips
-          if (METHOD(_method, 0)) _result &= _indi[PREV].value[HeikenAshi_Mode] < _indi[PPREV].value[HeikenAshi_Mode]; // ... 2 consecutive columns are red.
-          if (METHOD(_method, 1)) _result &= _indi[PPREV].value[HeikenAshi_Mode] < _indi[3].value[HeikenAshi_Mode]; // ... 3 consecutive columns are red.
-          if (METHOD(_method, 2)) _result &= _indi[3].value[HeikenAshi_Mode] < _indi[4].value[HeikenAshi_Mode]; // ... 4 consecutive columns are red.
-          if (METHOD(_method, 3)) _result &= _indi[PREV].value[HeikenAshi_Mode] > _indi[PPREV].value[HeikenAshi_Mode]; // ... 2 consecutive columns are green.
-          if (METHOD(_method, 4)) _result &= _indi[PPREV].value[HeikenAshi_Mode] > _indi[3].value[HeikenAshi_Mode]; // ... 3 consecutive columns are green.
-          if (METHOD(_method, 5)) _result &= _indi[3].value[HeikenAshi_Mode] < _indi[4].value[HeikenAshi_Mode]; // ... 4 consecutive columns are green.
+          _result = _indi[CURR].value[HeikenAshi_Mode] >
+                    _indi[PREV].value[HeikenAshi_Mode] + _level_pips;  // @todo: Add _level_pips
+          if (METHOD(_method, 0))
+            _result &= _indi[PREV].value[HeikenAshi_Mode] <
+                       _indi[PPREV].value[HeikenAshi_Mode];  // ... 2 consecutive columns are red.
+          if (METHOD(_method, 1))
+            _result &= _indi[PPREV].value[HeikenAshi_Mode] <
+                       _indi[3].value[HeikenAshi_Mode];  // ... 3 consecutive columns are red.
+          if (METHOD(_method, 2))
+            _result &= _indi[3].value[HeikenAshi_Mode] <
+                       _indi[4].value[HeikenAshi_Mode];  // ... 4 consecutive columns are red.
+          if (METHOD(_method, 3))
+            _result &= _indi[PREV].value[HeikenAshi_Mode] >
+                       _indi[PPREV].value[HeikenAshi_Mode];  // ... 2 consecutive columns are green.
+          if (METHOD(_method, 4))
+            _result &= _indi[PPREV].value[HeikenAshi_Mode] >
+                       _indi[3].value[HeikenAshi_Mode];  // ... 3 consecutive columns are green.
+          if (METHOD(_method, 5))
+            _result &= _indi[3].value[HeikenAshi_Mode] <
+                       _indi[4].value[HeikenAshi_Mode];  // ... 4 consecutive columns are green.
           break;
         case ORDER_TYPE_SELL:
-          _result = _indi[CURR].value[HeikenAshi_Mode] + _level_pips < _indi[PREV].value[HeikenAshi_Mode]; // @todo: Add _level_pips
-          if (METHOD(_method, 0)) _result &= _indi[PREV].value[HeikenAshi_Mode] < _indi[PPREV].value[HeikenAshi_Mode]; // ... 2 consecutive columns are red.
-          if (METHOD(_method, 1)) _result &= _indi[PPREV].value[HeikenAshi_Mode] < _indi[3].value[HeikenAshi_Mode]; // ... 3 consecutive columns are red.
-          if (METHOD(_method, 2)) _result &= _indi[3].value[HeikenAshi_Mode] < _indi[4].value[HeikenAshi_Mode]; // ... 4 consecutive columns are red.
-          if (METHOD(_method, 3)) _result &= _indi[PREV].value[HeikenAshi_Mode] > _indi[PPREV].value[HeikenAshi_Mode]; // ... 2 consecutive columns are green.
-          if (METHOD(_method, 4)) _result &= _indi[PPREV].value[HeikenAshi_Mode] > _indi[3].value[HeikenAshi_Mode]; // ... 3 consecutive columns are green.
-          if (METHOD(_method, 5)) _result &= _indi[3].value[HeikenAshi_Mode] < _indi[4].value[HeikenAshi_Mode]; // ... 4 consecutive columns are green.
+          _result = _indi[CURR].value[HeikenAshi_Mode] + _level_pips <
+                    _indi[PREV].value[HeikenAshi_Mode];  // @todo: Add _level_pips
+          if (METHOD(_method, 0))
+            _result &= _indi[PREV].value[HeikenAshi_Mode] <
+                       _indi[PPREV].value[HeikenAshi_Mode];  // ... 2 consecutive columns are red.
+          if (METHOD(_method, 1))
+            _result &= _indi[PPREV].value[HeikenAshi_Mode] <
+                       _indi[3].value[HeikenAshi_Mode];  // ... 3 consecutive columns are red.
+          if (METHOD(_method, 2))
+            _result &= _indi[3].value[HeikenAshi_Mode] <
+                       _indi[4].value[HeikenAshi_Mode];  // ... 4 consecutive columns are red.
+          if (METHOD(_method, 3))
+            _result &= _indi[PREV].value[HeikenAshi_Mode] >
+                       _indi[PPREV].value[HeikenAshi_Mode];  // ... 2 consecutive columns are green.
+          if (METHOD(_method, 4))
+            _result &= _indi[PPREV].value[HeikenAshi_Mode] >
+                       _indi[3].value[HeikenAshi_Mode];  // ... 3 consecutive columns are green.
+          if (METHOD(_method, 5))
+            _result &= _indi[3].value[HeikenAshi_Mode] <
+                       _indi[4].value[HeikenAshi_Mode];  // ... 4 consecutive columns are green.
           break;
       }
       Print(_indi.ToString());
@@ -145,48 +164,9 @@ class Stg_HeikenAshi : public Strategy {
   }
 
   /**
-   * Check strategy's opening signal additional filter.
-   */
-  bool SignalOpenFilter(ENUM_ORDER_TYPE _cmd, int _method = 0) {
-    bool _result = true;
-    if (_method != 0) {
-      // if (METHOD(_method, 0)) _result &= Trade().IsTrend(_cmd);
-      // if (METHOD(_method, 1)) _result &= Trade().IsPivot(_cmd);
-      // if (METHOD(_method, 2)) _result &= Trade().IsPeakHours(_cmd);
-      // if (METHOD(_method, 3)) _result &= Trade().IsRoundNumber(_cmd);
-      // if (METHOD(_method, 4)) _result &= Trade().IsHedging(_cmd);
-      // if (METHOD(_method, 5)) _result &= Trade().IsPeakBar(_cmd);
-    }
-    return _result;
-  }
-
-  /**
-   * Gets strategy's lot size boost (when enabled).
-   */
-  double SignalOpenBoost(ENUM_ORDER_TYPE _cmd, int _method = 0) {
-    bool _result = 1.0;
-    if (_method != 0) {
-      // if (METHOD(_method, 0)) if (Trade().IsTrend(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 1)) if (Trade().IsPivot(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 2)) if (Trade().IsPeakHours(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 3)) if (Trade().IsRoundNumber(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 4)) if (Trade().IsHedging(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 5)) if (Trade().IsPeakBar(_cmd)) _result *= 1.1;
-    }
-    return _result;
-  }
-
-  /**
-   * Check strategy's closing signal.
-   */
-  bool SignalClose(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
-    return SignalOpen(Order::NegateOrderType(_cmd), _method, _level);
-  }
-
-  /**
    * Gets price limit value for profit take or stop loss.
    */
-  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, double _level = 0.0) {
+  float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
     Indi_HeikenAshi *_indi = Data();
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
     double _trail = _level * Market().GetPipSize();
@@ -204,8 +184,9 @@ class Stg_HeikenAshi : public Strategy {
         _result = _indi[PREV].value[HA_CLOSE] + _trail * _direction;
         break;
       case 3: {
-        int _bar_count = (int) _level * 10;
-        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count)) : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count));
+        int _bar_count = (int)_level * 10;
+        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count))
+                                 : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count));
         break;
       }
     }
