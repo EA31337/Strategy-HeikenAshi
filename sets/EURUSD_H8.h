@@ -4,9 +4,9 @@
  */
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_HeikenAshi_Params_H1 : StgParams {
+struct Stg_HeikenAshi_Params_H8 : StgParams {
   // Struct constructor.
-  Stg_HeikenAshi_Params_H1() : StgParams(stg_ha_defaults) {
+  Stg_HeikenAshi_Params_H8() : StgParams(stg_ha_defaults) {
     lot_size = 0;
     signal_open_method = 0;
     signal_open_filter = 1;
@@ -19,4 +19,4 @@ struct Stg_HeikenAshi_Params_H1 : StgParams {
     tick_filter_method = 1;
     max_spread = 0;
   }
-} stg_ha_h1;
+} stg_ha_h8;
