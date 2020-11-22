@@ -15,8 +15,8 @@ INPUT int HeikenAshi_SignalOpenFilterMethod = 0;    // Signal open filter method
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;     // Signal open boost method
 INPUT int HeikenAshi_SignalCloseMethod = 0;         // Signal close method
 INPUT float HeikenAshi_SignalCloseLevel = 0.0004f;  // Signal close level (>0.0001)
-INPUT int HeikenAshi_PriceLimitMethod = 0;          // Price limit method
-INPUT float HeikenAshi_PriceLimitLevel = 0;         // Price limit level
+INPUT int HeikenAshi_PriceStopMethod = 0;           // Price stop method
+INPUT float HeikenAshi_PriceStopLevel = 0;          // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 0;          // Tick filter method
 INPUT float HeikenAshi_MaxSpread = 6.0;             // Max spread to trade (pips)
 INPUT int HeikenAshi_Shift = 0;                     // Shift (relative to the current bar, 0 - default)
@@ -37,7 +37,7 @@ struct Stg_HeikenAshi_Params_Defaults : StgParams {
   Stg_HeikenAshi_Params_Defaults()
       : StgParams(::HeikenAshi_SignalOpenMethod, ::HeikenAshi_SignalOpenFilterMethod, ::HeikenAshi_SignalOpenLevel,
                   ::HeikenAshi_SignalOpenBoostMethod, ::HeikenAshi_SignalCloseMethod, ::HeikenAshi_SignalCloseLevel,
-                  ::HeikenAshi_PriceLimitMethod, ::HeikenAshi_PriceLimitLevel, ::HeikenAshi_TickFilterMethod,
+                  ::HeikenAshi_PriceStopMethod, ::HeikenAshi_PriceStopLevel, ::HeikenAshi_TickFilterMethod,
                   ::HeikenAshi_MaxSpread, ::HeikenAshi_Shift) {}
 } stg_ha_defaults;
 
@@ -150,9 +150,9 @@ class Stg_HeikenAshi : public Strategy {
   }
 
   /**
-   * Gets price limit value for profit take or stop loss.
+   * Gets price stop value for profit take or stop loss.
    */
-  float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
+  float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
     Indi_HeikenAshi *_indi = Data();
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
     double _trail = _level * Market().GetPipSize();
