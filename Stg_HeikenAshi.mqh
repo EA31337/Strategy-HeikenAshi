@@ -160,16 +160,16 @@ class Stg_HeikenAshi : public Strategy {
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
     switch (_method) {
-      case 0:
+      case 1:
         _result = (_direction < 0 ? _indi[PREV].value[HA_LOW] : _indi[PREV].value[HA_HIGH]) + _trail * _direction;
         break;
-      case 1:
+      case 2:
         _result = _indi[PREV].value[HA_OPEN] + _trail * _direction;
         break;
-      case 2:
+      case 3:
         _result = _indi[PREV].value[HA_CLOSE] + _trail * _direction;
         break;
-      case 3: {
+      case 4: {
         int _bar_count = (int)_level * 10;
         _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count))
                                  : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count));
