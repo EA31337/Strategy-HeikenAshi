@@ -110,38 +110,34 @@ class Stg_HeikenAshi : public Strategy {
     if (_is_valid) {
       switch (_cmd) {
         case ORDER_TYPE_BUY:
-          _result = _indi[CURR].value[_ha_mode] > _indi[PREV].value[_ha_mode] + _level_pips;  // @todo: Add _level_pips
+          _result = _indi[CURR][_ha_mode] > _indi[PREV][_ha_mode] + _level_pips;  // @todo: Add _level_pips
           if (METHOD(_method, 0))
-            _result &=
-                _indi[PREV].value[_ha_mode] < _indi[PPREV].value[_ha_mode];  // ... 2 consecutive columns are red.
+            _result &= _indi[PREV][_ha_mode] < _indi[PPREV][_ha_mode];  // ... 2 consecutive columns are red.
           if (METHOD(_method, 1))
-            _result &= _indi[PPREV].value[_ha_mode] < _indi[3].value[_ha_mode];  // ... 3 consecutive columns are red.
+            _result &= _indi[PPREV][_ha_mode] < _indi[3][_ha_mode];  // ... 3 consecutive columns are red.
           if (METHOD(_method, 2))
-            _result &= _indi[3].value[_ha_mode] < _indi[4].value[_ha_mode];  // ... 4 consecutive columns are red.
+            _result &= _indi[3][_ha_mode] < _indi[4][_ha_mode];  // ... 4 consecutive columns are red.
           if (METHOD(_method, 3))
-            _result &=
-                _indi[PREV].value[_ha_mode] > _indi[PPREV].value[_ha_mode];  // ... 2 consecutive columns are green.
+            _result &= _indi[PREV][_ha_mode] > _indi[PPREV][_ha_mode];  // ... 2 consecutive columns are green.
           if (METHOD(_method, 4))
-            _result &= _indi[PPREV].value[_ha_mode] > _indi[3].value[_ha_mode];  // ... 3 consecutive columns are green.
+            _result &= _indi[PPREV][_ha_mode] > _indi[3][_ha_mode];  // ... 3 consecutive columns are green.
           if (METHOD(_method, 5))
-            _result &= _indi[3].value[_ha_mode] < _indi[4].value[_ha_mode];  // ... 4 consecutive columns are green.
+            _result &= _indi[3][_ha_mode] < _indi[4][_ha_mode];  // ... 4 consecutive columns are green.
           break;
         case ORDER_TYPE_SELL:
-          _result = _indi[CURR].value[_ha_mode] + _level_pips < _indi[PREV].value[_ha_mode];  // @todo: Add _level_pips
+          _result = _indi[CURR][_ha_mode] + _level_pips < _indi[PREV][_ha_mode];  // @todo: Add _level_pips
           if (METHOD(_method, 0))
-            _result &=
-                _indi[PREV].value[_ha_mode] < _indi[PPREV].value[_ha_mode];  // ... 2 consecutive columns are red.
+            _result &= _indi[PREV][_ha_mode] < _indi[PPREV][_ha_mode];  // ... 2 consecutive columns are red.
           if (METHOD(_method, 1))
-            _result &= _indi[PPREV].value[_ha_mode] < _indi[3].value[_ha_mode];  // ... 3 consecutive columns are red.
+            _result &= _indi[PPREV][_ha_mode] < _indi[3][_ha_mode];  // ... 3 consecutive columns are red.
           if (METHOD(_method, 2))
-            _result &= _indi[3].value[_ha_mode] < _indi[4].value[_ha_mode];  // ... 4 consecutive columns are red.
+            _result &= _indi[3][_ha_mode] < _indi[4][_ha_mode];  // ... 4 consecutive columns are red.
           if (METHOD(_method, 3))
-            _result &=
-                _indi[PREV].value[_ha_mode] > _indi[PPREV].value[_ha_mode];  // ... 2 consecutive columns are green.
+            _result &= _indi[PREV][_ha_mode] > _indi[PPREV][_ha_mode];  // ... 2 consecutive columns are green.
           if (METHOD(_method, 4))
-            _result &= _indi[PPREV].value[_ha_mode] > _indi[3].value[_ha_mode];  // ... 3 consecutive columns are green.
+            _result &= _indi[PPREV][_ha_mode] > _indi[3][_ha_mode];  // ... 3 consecutive columns are green.
           if (METHOD(_method, 5))
-            _result &= _indi[3].value[_ha_mode] < _indi[4].value[_ha_mode];  // ... 4 consecutive columns are green.
+            _result &= _indi[3][_ha_mode] < _indi[4][_ha_mode];  // ... 4 consecutive columns are green.
           break;
       }
       Print(_indi.ToString());
@@ -161,13 +157,13 @@ class Stg_HeikenAshi : public Strategy {
     double _result = _default_value;
     switch (_method) {
       case 1:
-        _result = (_direction < 0 ? _indi[PREV].value[HA_LOW] : _indi[PREV].value[HA_HIGH]) + _trail * _direction;
+        _result = (_direction < 0 ? _indi[PREV][HA_LOW] : _indi[PREV][HA_HIGH]) + _trail * _direction;
         break;
       case 2:
-        _result = _indi[PREV].value[HA_OPEN] + _trail * _direction;
+        _result = _indi[PREV][HA_OPEN] + _trail * _direction;
         break;
       case 3:
-        _result = _indi[PREV].value[HA_CLOSE] + _trail * _direction;
+        _result = _indi[PREV][HA_CLOSE] + _trail * _direction;
         break;
       case 4: {
         int _bar_count = (int)_level * 10;
