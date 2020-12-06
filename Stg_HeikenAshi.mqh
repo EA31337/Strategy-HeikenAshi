@@ -3,10 +3,6 @@
  * Implements HeikenAshi strategy based on the Average True Range indicator (Heiken Ashi).
  */
 
-// Includes.
-#include <EA31337-classes/Indicators/Indi_HeikenAshi.mqh>
-#include <EA31337-classes/Strategy.mqh>
-
 // User input params.
 INPUT float HeikenAshi_LotSize = 0;                 // Lot size
 INPUT int HeikenAshi_SignalOpenMethod = 0;          // Signal open method (0-1)
