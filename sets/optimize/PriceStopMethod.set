@@ -1,0 +1,8 @@
+; Optimize price stop method param.
+HeikenAshi_PriceStopMethod,1=0
+HeikenAshi_PriceStopMethod,2=1
+HeikenAshi_PriceStopMethod,3=4
+HeikenAshi_PriceStopMethod,F=1
+HeikenAshi_OrderCloseTime=-20
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1

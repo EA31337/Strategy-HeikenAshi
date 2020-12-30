@@ -1,0 +1,7 @@
+; Optimize price stop level param.
+HeikenAshi_PriceStopLevel,1=10
+HeikenAshi_PriceStopLevel,2=5
+HeikenAshi_PriceStopLevel,3=40
+HeikenAshi_PriceStopLevel,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1

@@ -1,0 +1,6 @@
+; Optimize tick filter method param.
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod,1=1
+HeikenAshi_TickFilterMethod,2=1
+HeikenAshi_TickFilterMethod,3=32
+HeikenAshi_TickFilterMethod,F=1

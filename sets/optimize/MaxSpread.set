@@ -1,0 +1,7 @@
+; Optimize max spread param.
+HeikenAshi_MaxSpread,1=10
+HeikenAshi_MaxSpread,2=10
+HeikenAshi_MaxSpread,3=40
+HeikenAshi_MaxSpread,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1

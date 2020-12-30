@@ -1,0 +1,7 @@
+; Optimize signal close method param.
+HeikenAshi_SignalCloseMethod,1=-4
+HeikenAshi_SignalCloseMethod,2=1
+HeikenAshi_SignalCloseMethod,3=4
+HeikenAshi_SignalCloseMethod,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1

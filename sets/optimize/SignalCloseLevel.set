@@ -1,0 +1,7 @@
+; Optimize signal close level param.
+HeikenAshi_SignalCloseLevel,1=10
+HeikenAshi_SignalCloseLevel,2=5
+HeikenAshi_SignalCloseLevel,3=40
+HeikenAshi_SignalCloseLevel,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1

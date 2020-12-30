@@ -1,0 +1,7 @@
+; Optimize signal open boost method param.
+HeikenAshi_SignalOpenBoostMethod,1=1
+HeikenAshi_SignalOpenBoostMethod,2=1
+HeikenAshi_SignalOpenBoostMethod,3=8
+HeikenAshi_SignalOpenBoostMethod,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1

@@ -1,0 +1,7 @@
+; Optimize signal open level param.
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_SignalOpenLevel,1=0
+HeikenAshi_SignalOpenLevel,2=1
+HeikenAshi_SignalOpenLevel,3=10
+HeikenAshi_SignalOpenLevel,F=1
+HeikenAshi_TickFilterMethod=1
