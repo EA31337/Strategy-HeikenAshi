@@ -16,6 +16,7 @@ INPUT float HeikenAshi_PriceStopLevel = 0;          // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 0;          // Tick filter method
 INPUT float HeikenAshi_MaxSpread = 6.0;             // Max spread to trade (pips)
 INPUT int HeikenAshi_Shift = 0;                     // Shift (relative to the current bar, 0 - default)
+INPUT int HeikenAshi_OrderCloseTime = -10;          // Order close time in mins (>0) or bars (<0)
 INPUT string __HeikenAshi_Indi_HeikenAshi_Parameters__ =
     "-- HeikenAshi strategy: HeikenAshi indicator params --";  // >>> HeikenAshi strategy: HeikenAshi indicator <<<
 INPUT ENUM_HA_MODE Indi_HeikenAshi_Mode = HA_HIGH;             // HA mode
@@ -34,7 +35,7 @@ struct Stg_HeikenAshi_Params_Defaults : StgParams {
       : StgParams(::HeikenAshi_SignalOpenMethod, ::HeikenAshi_SignalOpenFilterMethod, ::HeikenAshi_SignalOpenLevel,
                   ::HeikenAshi_SignalOpenBoostMethod, ::HeikenAshi_SignalCloseMethod, ::HeikenAshi_SignalCloseLevel,
                   ::HeikenAshi_PriceStopMethod, ::HeikenAshi_PriceStopLevel, ::HeikenAshi_TickFilterMethod,
-                  ::HeikenAshi_MaxSpread, ::HeikenAshi_Shift) {}
+                  ::HeikenAshi_MaxSpread, ::HeikenAshi_Shift, ::HeikenAshi_OrderCloseTime) {}
 } stg_ha_defaults;
 
 // Struct to define strategy parameters to override.
