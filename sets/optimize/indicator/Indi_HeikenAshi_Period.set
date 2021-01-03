@@ -1,0 +1,7 @@
+; Optimize strategy indicator's HeikenAshi period param.
+HeikenAshi_Indi_HeikenAshi_Period,1=4
+HeikenAshi_Indi_HeikenAshi_Period,2=4
+HeikenAshi_Indi_HeikenAshi_Period,3=24
+HeikenAshi_Indi_HeikenAshi_Period,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1
