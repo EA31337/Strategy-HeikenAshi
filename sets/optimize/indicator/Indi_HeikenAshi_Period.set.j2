@@ -9,5 +9,5 @@ HeikenAshi_Indi_HeikenAshi_Shift={{ shift | default(0) }}
 HeikenAshi_LotSize={{ lot_size | default(0) }}
 HeikenAshi_PriceStopMethod=0
 HeikenAshi_SignalOpenFilterMethod=1
-HeikenAshi_SignalOpenLevel={{ signal_open_level | default(0) }}
+HeikenAshi_SignalOpenLevel={{ signal_open_level | replace("(float)", "") | float | default(0) }}
 HeikenAshi_TickFilterMethod=1
