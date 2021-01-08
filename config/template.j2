@@ -25,7 +25,7 @@ struct Stg_HeikenAshi_Params_{{ Timeframe }} : StgParams {
     signal_close_method = {{ HeikenAshi_SignalCloseMethod | default(0) }};
     signal_close_level = (float){{ HeikenAshi_SignalCloseLevel | default(0) }};
     price_stop_method = {{ HeikenAshi_PriceStopMethod | default(0) }};
-    price_stop_level = {{ HeikenAshi_SignalCloseLevel | default(1) }};
+    price_stop_level = (float){{ HeikenAshi_SignalCloseLevel | default(1) }};
     tick_filter_method = {{ HeikenAshi_TickFilterMethod  | default(1) }};
     max_spread = {{ HeikenAshi_MaxSpread | default(0) }};
   }
