@@ -19,15 +19,14 @@ INPUT int HeikenAshi_Shift = 0;                   // Shift (relative to the curr
 INPUT int HeikenAshi_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __HeikenAshi_Indi_HeikenAshi_Parameters__ =
     "-- HeikenAshi strategy: HeikenAshi indicator params --";  // >>> HeikenAshi strategy: HeikenAshi indicator <<<
-INPUT ENUM_HA_MODE Indi_HeikenAshi_Mode = HA_HIGH;             // HA mode
+INPUT int HeikenAshi_Indi_HeikenAshi_Shift = 0;                // Shift
 
 // Structs.
 
-// Defines struct to store indicator parameter values.
-struct Indi_HeikenAshi_Params : public HeikenAshiParams {
-  // Struct constructors.
-  void Indi_HeikenAshi_Params(HeikenAshiParams &_params, ENUM_TIMEFRAMES _tf) : HeikenAshiParams(_params, _tf) {}
-};
+// Defines struct with default user indicator values.
+struct Indi_HeikenAshi_Params_Defaults : HeikenAshiParams {
+  Indi_HeikenAshi_Params_Defaults() : HeikenAshiParams(::HeikenAshi_Indi_HeikenAshi_Shift) {}
+} indi_ha_defaults;
 
 // Defines struct with default user strategy values.
 struct Stg_HeikenAshi_Params_Defaults : StgParams {
@@ -43,7 +42,7 @@ struct Stg_HeikenAshi_Params : StgParams {
   StgParams sparams;
 
   // Struct constructors.
-  Stg_HeikenAshi_Params(Indi_HeikenAshi_Params &_iparams, StgParams &_sparams) : sparams(stg_ha_defaults) {
+  Stg_HeikenAshi_Params(HeikenAshiParams &_iparams, StgParams &_sparams) : sparams(stg_ha_defaults) {
     sparams = _sparams;
   }
 };
@@ -103,7 +102,7 @@ class Stg_HeikenAshi : public Strategy {
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
     bool _result = _is_valid;
     double _level_pips = _level * Chart().GetPipSize();
-    ENUM_HA_MODE _ha_mode = Indi_HeikenAshi_Mode;
+    ENUM_HA_MODE _ha_mode = MODE_CLOSE;
     if (_is_valid) {
       switch (_cmd) {
         case ORDER_TYPE_BUY:
