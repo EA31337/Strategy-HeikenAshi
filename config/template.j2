@@ -4,13 +4,8 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_HeikenAshi_Params_{{ Timeframe }} : Indi_HeikenAshi_Params {
-  Indi_HeikenAshi_Params_{{ Timeframe }}() : Indi_HeikenAshi_Params(indi_ha_defaults, PERIOD_{{ Timeframe }}) {
-    applied_price = (ENUM_APPLIED_PRICE){{ HeikenAshi_Indi_HeikenAshi_Applied_Price | default(0) }};
-    ma_method = {{ HeikenAshi_Indi_HeikenAshi_MA_Method | default(0) }};
-    period = {{ HeikenAshi_Indi_HeikenAshi_Period | default(0) }};
-    shift = {{ HeikenAshi_Shift | default(0) }};
-  }
+struct Indi_HeikenAshi_Params_{{ Timeframe }} : HeikenAshiParams {
+  Indi_HeikenAshi_Params_{{ Timeframe }}() : HeikenAshiParams(indi_ha_defaults, PERIOD_{{ Timeframe }}) { shift = {{ HeikenAshi_Indi_HeikenAshi_Shift | default(0) }}; }
 } indi_ha_{{ Timeframe | lower }};
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.

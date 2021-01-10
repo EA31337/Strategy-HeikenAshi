@@ -1,0 +1,7 @@
+; Optimize strategy indicator's HeikenAshi shift param.
+HeikenAshi_Indi_HeikenAshi_Shift,1=4
+HeikenAshi_Indi_HeikenAshi_Shift,2=4
+HeikenAshi_Indi_HeikenAshi_Shift,3=24
+HeikenAshi_Indi_HeikenAshi_Shift,F=1
+HeikenAshi_SignalOpenFilterMethod=1
+HeikenAshi_TickFilterMethod=1
