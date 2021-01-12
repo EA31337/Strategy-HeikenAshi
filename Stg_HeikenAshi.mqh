@@ -103,9 +103,12 @@ class Stg_HeikenAshi : public Strategy {
     bool _result = _is_valid;
     if (_is_valid) {
       datetime _time = Chart().GetBarTime(_shift);
-      BarOHLC _ohlc0(_indi[CURR][HA_OPEN], _indi[CURR][HA_HIGH], _indi[CURR][HA_LOW], _indi[CURR][HA_CLOSE], _time);
-      BarOHLC _ohlc1(_indi[PREV][HA_OPEN], _indi[PREV][HA_HIGH], _indi[PREV][HA_LOW], _indi[PREV][HA_CLOSE], _time);
-      BarOHLC _ohlc2(_indi[PPREV][HA_OPEN], _indi[PPREV][HA_HIGH], _indi[PPREV][HA_LOW], _indi[PPREV][HA_CLOSE], _time);
+      BarOHLC _ohlc0((float)_indi[CURR][(int)HA_OPEN], (float)_indi[CURR][(int)HA_HIGH],
+                     (float)_indi[CURR][(int)HA_LOW], (float)_indi[CURR][(int)HA_CLOSE], _time);
+      BarOHLC _ohlc1((float)_indi[PREV][(int)HA_OPEN], (float)_indi[PREV][(int)HA_HIGH],
+                     (float)_indi[PREV][(int)HA_LOW], (float)_indi[PREV][(int)HA_CLOSE], _time);
+      BarOHLC _ohlc2((float)_indi[PPREV][(int)HA_OPEN], (float)_indi[PPREV][(int)HA_HIGH],
+                     (float)_indi[PPREV][(int)HA_LOW], (float)_indi[PPREV][(int)HA_CLOSE], _time);
       switch (_cmd) {
         case ORDER_TYPE_BUY:
           _result &= _ohlc0.GetChangeInPct(true) > _level;
