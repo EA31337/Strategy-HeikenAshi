@@ -31,7 +31,7 @@ input bool Info_On_Chart = true;          // Display info on chart.
 #property description ea_desc
 #endif
 #property link ea_link
-#property copyright "Copyright 2016-2019, kenorb"
+#property copyright "Copyright 2016-2021, kenorb"
 
 // Class variables.
 EA *ea;

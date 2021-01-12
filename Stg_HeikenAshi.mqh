@@ -5,12 +5,12 @@
 
 // User input params.
 INPUT float HeikenAshi_LotSize = 0;               // Lot size
-INPUT int HeikenAshi_SignalOpenMethod = 0;        // Signal open method (0-1)
-INPUT float HeikenAshi_SignalOpenLevel = 0.0f;    // Signal open level (>0.0001)
+INPUT int HeikenAshi_SignalOpenMethod = 0;        // Signal open method (-3-3)
+INPUT float HeikenAshi_SignalOpenLevel = 0.0f;    // Signal open level
 INPUT int HeikenAshi_SignalOpenFilterMethod = 1;  // Signal open filter method
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;   // Signal open boost method
-INPUT int HeikenAshi_SignalCloseMethod = 0;       // Signal close method
-INPUT float HeikenAshi_SignalCloseLevel = 0.0f;   // Signal close level (>0.0001)
+INPUT int HeikenAshi_SignalCloseMethod = 0;       // Signal close method (-3-3)
+INPUT float HeikenAshi_SignalCloseLevel = 0.0f;   // Signal close level
 INPUT int HeikenAshi_PriceStopMethod = 0;         // Price stop method
 INPUT float HeikenAshi_PriceStopLevel = 0;        // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 1;        // Tick filter method
@@ -101,41 +101,25 @@ class Stg_HeikenAshi : public Strategy {
     Indi_HeikenAshi *_indi = Data();
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
     bool _result = _is_valid;
-    double _level_pips = _level * Chart().GetPipSize();
-    ENUM_HA_MODE _ha_mode = Indi_HeikenAshi_Mode;
     if (_is_valid) {
+      datetime _time = Chart().GetBarTime(_shift);
+      BarOHLC _ohlc0(_indi[CURR][HA_OPEN], _indi[CURR][HA_HIGH], _indi[CURR][HA_LOW], _indi[CURR][HA_CLOSE], _time);
+      BarOHLC _ohlc1(_indi[PREV][HA_OPEN], _indi[PREV][HA_HIGH], _indi[PREV][HA_LOW], _indi[PREV][HA_CLOSE], _time);
+      BarOHLC _ohlc2(_indi[PPREV][HA_OPEN], _indi[PPREV][HA_HIGH], _indi[PPREV][HA_LOW], _indi[PPREV][HA_CLOSE], _time);
       switch (_cmd) {
         case ORDER_TYPE_BUY:
-          _result = _indi[CURR][(int)_ha_mode] > _indi[PREV][(int)_ha_mode] + _level_pips;  // @todo: Add _level_pips
-          if (METHOD(_method, 0))
-            _result &= _indi[PREV][(int)_ha_mode] < _indi[PPREV][(int)_ha_mode];  // ... 2 consecutive columns are red.
-          if (METHOD(_method, 1))
-            _result &= _indi[PPREV][(int)_ha_mode] < _indi[3][(int)_ha_mode];  // ... 3 consecutive columns are red.
-          if (METHOD(_method, 2))
-            _result &= _indi[3][(int)_ha_mode] < _indi[4][(int)_ha_mode];  // ... 4 consecutive columns are red.
-          if (METHOD(_method, 3))
-            _result &=
-                _indi[PREV][(int)_ha_mode] > _indi[PPREV][(int)_ha_mode];  // ... 2 consecutive columns are green.
-          if (METHOD(_method, 4))
-            _result &= _indi[PPREV][(int)_ha_mode] > _indi[3][(int)_ha_mode];  // ... 3 consecutive columns are green.
-          if (METHOD(_method, 5))
-            _result &= _indi[3][(int)_ha_mode] < _indi[4][(int)_ha_mode];  // ... 4 consecutive columns are green.
+          _result &= _ohlc0.GetChangeInPct(true) > _level;
+          _result &= _ohlc0.isBullish();
+          _result &= _ohlc1.isBearish();
+          if (METHOD(_method, 0)) _result &= _ohlc2.isBearish();
+          if (METHOD(_method, 1)) _result &= _ohlc1.GetChangeInPct(true) > _level;
           break;
         case ORDER_TYPE_SELL:
-          _result = _indi[CURR][(int)_ha_mode] + _level_pips < _indi[PREV][(int)_ha_mode];  // @todo: Add _level_pips
-          if (METHOD(_method, 0))
-            _result &= _indi[PREV][(int)_ha_mode] < _indi[PPREV][(int)_ha_mode];  // ... 2 consecutive columns are red.
-          if (METHOD(_method, 1))
-            _result &= _indi[PPREV][(int)_ha_mode] < _indi[3][(int)_ha_mode];  // ... 3 consecutive columns are red.
-          if (METHOD(_method, 2))
-            _result &= _indi[3][(int)_ha_mode] < _indi[4][(int)_ha_mode];  // ... 4 consecutive columns are red.
-          if (METHOD(_method, 3))
-            _result &=
-                _indi[PREV][(int)_ha_mode] > _indi[PPREV][(int)_ha_mode];  // ... 2 consecutive columns are green.
-          if (METHOD(_method, 4))
-            _result &= _indi[PPREV][(int)_ha_mode] > _indi[3][(int)_ha_mode];  // ... 3 consecutive columns are green.
-          if (METHOD(_method, 5))
-            _result &= _indi[3][(int)_ha_mode] < _indi[4][(int)_ha_mode];  // ... 4 consecutive columns are green.
+          _result &= _ohlc0.GetChangeInPct(true) < -_level;
+          _result &= _ohlc0.isBearish();
+          _result &= _ohlc1.isBullish();
+          if (METHOD(_method, 0)) _result &= _ohlc2.isBullish();
+          if (METHOD(_method, 1)) _result &= _ohlc1.GetChangeInPct(true) < -_level;
           break;
       }
       Print(_indi.ToString());
