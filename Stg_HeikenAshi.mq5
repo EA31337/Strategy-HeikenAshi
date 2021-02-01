@@ -3,6 +3,9 @@
  * Implements HeikenAshi strategy.
  */
 
+// Includes conditional compilation directives.
+#include "config/define.h"
+
 // Includes EA31337 framework.
 #include <EA31337-classes/EA.mqh>
 #include <EA31337-classes/Indicators/Indi_HeikenAshi.mqh>
