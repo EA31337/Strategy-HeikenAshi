@@ -64,10 +64,10 @@ class Stg_HeikenAshi : public Strategy {
   static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
     StgParams _stg_params(stg_ha_defaults);
-    if (!Terminal::IsOptimization()) {
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_ha_m1, stg_ha_m5, stg_ha_m15, stg_ha_m30, stg_ha_h1, stg_ha_h4,
-                               stg_ha_h8);
-    }
+#ifdef __config__
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_ha_m1, stg_ha_m5, stg_ha_m15, stg_ha_m30, stg_ha_h1, stg_ha_h4,
+                             stg_ha_h8);
+#endif
     // Initialize indicator.
     HeikenAshiParams _indi_params(_tf);
     _stg_params.SetIndicator(new Indi_HeikenAshi(_indi_params));
