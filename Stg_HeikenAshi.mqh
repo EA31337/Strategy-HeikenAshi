@@ -4,19 +4,20 @@
  */
 
 // User input params.
-INPUT float HeikenAshi_LotSize = 0;               // Lot size
-INPUT int HeikenAshi_SignalOpenMethod = 0;        // Signal open method (-3-3)
-INPUT float HeikenAshi_SignalOpenLevel = 0.0f;    // Signal open level
-INPUT int HeikenAshi_SignalOpenFilterMethod = 1;  // Signal open filter method
-INPUT int HeikenAshi_SignalOpenBoostMethod = 0;   // Signal open boost method
-INPUT int HeikenAshi_SignalCloseMethod = 0;       // Signal close method (-3-3)
-INPUT float HeikenAshi_SignalCloseLevel = 0.0f;   // Signal close level
-INPUT int HeikenAshi_PriceStopMethod = 0;         // Price stop method
-INPUT float HeikenAshi_PriceStopLevel = 0;        // Price stop level
-INPUT int HeikenAshi_TickFilterMethod = 1;        // Tick filter method
-INPUT float HeikenAshi_MaxSpread = 4.0;           // Max spread to trade (pips)
-INPUT int HeikenAshi_Shift = 0;                   // Shift (relative to the current bar, 0 - default)
-INPUT int HeikenAshi_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
+INPUT string __HeikenAshi_Parameters__ = "-- HeikenAshi strategy params --";  // >>> HeikenAshi <<<
+INPUT float HeikenAshi_LotSize = 0;                                           // Lot size
+INPUT int HeikenAshi_SignalOpenMethod = 0;                                    // Signal open method (-3-3)
+INPUT float HeikenAshi_SignalOpenLevel = 0.0f;                                // Signal open level
+INPUT int HeikenAshi_SignalOpenFilterMethod = 1;                              // Signal open filter method
+INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                               // Signal open boost method
+INPUT int HeikenAshi_SignalCloseMethod = 0;                                   // Signal close method (-3-3)
+INPUT float HeikenAshi_SignalCloseLevel = 0.0f;                               // Signal close level
+INPUT int HeikenAshi_PriceStopMethod = 0;                                     // Price stop method
+INPUT float HeikenAshi_PriceStopLevel = 0;                                    // Price stop level
+INPUT int HeikenAshi_TickFilterMethod = 1;                                    // Tick filter method
+INPUT float HeikenAshi_MaxSpread = 4.0;                                       // Max spread to trade (pips)
+INPUT int HeikenAshi_Shift = 0;             // Shift (relative to the current bar, 0 - default)
+INPUT int HeikenAshi_OrderCloseTime = -20;  // Order close time in mins (>0) or bars (<0)
 INPUT string __HeikenAshi_Indi_HeikenAshi_Parameters__ =
     "-- HeikenAshi strategy: HeikenAshi indicator params --";  // >>> HeikenAshi strategy: HeikenAshi indicator <<<
 INPUT int HeikenAshi_Indi_HeikenAshi_Shift = 0;                // Shift
@@ -63,10 +64,10 @@ class Stg_HeikenAshi : public Strategy {
   static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
     StgParams _stg_params(stg_ha_defaults);
-    if (!Terminal::IsOptimization()) {
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_ha_m1, stg_ha_m5, stg_ha_m15, stg_ha_m30, stg_ha_h1, stg_ha_h4,
-                               stg_ha_h8);
-    }
+#ifdef __config__
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_ha_m1, stg_ha_m5, stg_ha_m15, stg_ha_m30, stg_ha_h1, stg_ha_h4,
+                             stg_ha_h8);
+#endif
     // Initialize indicator.
     HeikenAshiParams _indi_params(_tf);
     _stg_params.SetIndicator(new Indi_HeikenAshi(_indi_params));
@@ -76,7 +77,6 @@ class Stg_HeikenAshi : public Strategy {
     _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_HeikenAshi(_stg_params, "HeikenAshi");
-    _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
 
