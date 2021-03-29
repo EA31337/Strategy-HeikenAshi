@@ -16,7 +16,7 @@ INPUT int HeikenAshi_PriceStopMethod = 0;                                     //
 INPUT float HeikenAshi_PriceStopLevel = 0;                                    // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 1;                                    // Tick filter method
 INPUT float HeikenAshi_MaxSpread = 4.0;                                       // Max spread to trade (pips)
-INPUT int HeikenAshi_Shift = 0;             // Shift (relative to the current bar, 0 - default)
+INPUT short HeikenAshi_Shift = 0;           // Shift (relative to the current bar, 0 - default)
 INPUT int HeikenAshi_OrderCloseTime = -20;  // Order close time in mins (>0) or bars (<0)
 INPUT string __HeikenAshi_Indi_HeikenAshi_Parameters__ =
     "-- HeikenAshi strategy: HeikenAshi indicator params --";  // >>> HeikenAshi strategy: HeikenAshi indicator <<<
