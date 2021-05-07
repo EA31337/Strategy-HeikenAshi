@@ -111,16 +111,16 @@ class Stg_HeikenAshi : public Strategy {
       switch (_cmd) {
         case ORDER_TYPE_BUY:
           _result &= _ohlc0.GetChangeInPct(true) > _level;
-          _result &= _ohlc0.isBullish();
-          _result &= _ohlc1.isBearish();
-          if (METHOD(_method, 0)) _result &= _ohlc2.isBearish();
+          _result &= _ohlc0.IsBull();
+          _result &= _ohlc1.IsBear();
+          if (METHOD(_method, 0)) _result &= _ohlc2.IsBear();
           if (METHOD(_method, 1)) _result &= _ohlc1.GetChangeInPct(true) > _level;
           break;
         case ORDER_TYPE_SELL:
           _result &= _ohlc0.GetChangeInPct(true) < -_level;
-          _result &= _ohlc0.isBearish();
-          _result &= _ohlc1.isBullish();
-          if (METHOD(_method, 0)) _result &= _ohlc2.isBullish();
+          _result &= _ohlc0.IsBear();
+          _result &= _ohlc1.IsBull();
+          if (METHOD(_method, 0)) _result &= _ohlc2.IsBull();
           if (METHOD(_method, 1)) _result &= _ohlc1.GetChangeInPct(true) < -_level;
           break;
       }
