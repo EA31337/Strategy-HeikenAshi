@@ -6,13 +6,13 @@
 // User input params.
 INPUT string __HeikenAshi_Parameters__ = "-- HeikenAshi strategy params --";  // >>> HeikenAshi <<<
 INPUT float HeikenAshi_LotSize = 0;                                           // Lot size
-INPUT int HeikenAshi_SignalOpenMethod = 0;                                    // Signal open method (-3-3)
+INPUT int HeikenAshi_SignalOpenMethod = 2;                                    // Signal open method (-127-127)
 INPUT float HeikenAshi_SignalOpenLevel = 0.0f;                                // Signal open level
-INPUT int HeikenAshi_SignalOpenFilterMethod = 1;                              // Signal open filter method
+INPUT int HeikenAshi_SignalOpenFilterMethod = 32;                              // Signal open filter method
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                               // Signal open boost method
-INPUT int HeikenAshi_SignalCloseMethod = 0;                                   // Signal close method (-3-3)
+INPUT int HeikenAshi_SignalCloseMethod = 2;                                   // Signal close method (-127-127)
 INPUT float HeikenAshi_SignalCloseLevel = 0.0f;                               // Signal close level
-INPUT int HeikenAshi_PriceStopMethod = 0;                                     // Price stop method
+INPUT int HeikenAshi_PriceStopMethod = 1;                                     // Price stop method
 INPUT float HeikenAshi_PriceStopLevel = 0;                                    // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 1;                                    // Tick filter method
 INPUT float HeikenAshi_MaxSpread = 4.0;                                       // Max spread to trade (pips)
@@ -127,35 +127,5 @@ class Stg_HeikenAshi : public Strategy {
       Print(_indi.ToString());
     }
     return _result;
-  }
-
-  /**
-   * Gets price stop value for profit take or stop loss.
-   */
-  float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
-    Indi_HeikenAshi *_indi = GetIndicator();
-    bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
-    double _trail = _level * Market().GetPipSize();
-    int _direction = Order::OrderDirection(_cmd, _mode);
-    double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
-    double _result = _default_value;
-    switch (_method) {
-      case 1:
-        _result = (_direction < 0 ? _indi[PREV][(int)HA_LOW] : _indi[PREV][(int)HA_HIGH]) + _trail * _direction;
-        break;
-      case 2:
-        _result = _indi[PREV][(int)HA_OPEN] + _trail * _direction;
-        break;
-      case 3:
-        _result = _indi[PREV][(int)HA_CLOSE] + _trail * _direction;
-        break;
-      case 4: {
-        int _bar_count = (int)_level * 10;
-        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest<double>(_bar_count))
-                                 : _indi.GetPrice(PRICE_LOW, _indi.GetLowest<double>(_bar_count));
-        break;
-      }
-    }
-    return (float)_result;
   }
 };
