@@ -108,23 +108,19 @@ class Stg_HeikenAshi : public Strategy {
                      (float)_indi[PREV][(int)HA_LOW], (float)_indi[PREV][(int)HA_CLOSE], _time);
       BarOHLC _ohlc2((float)_indi[PPREV][(int)HA_OPEN], (float)_indi[PPREV][(int)HA_HIGH],
                      (float)_indi[PPREV][(int)HA_LOW], (float)_indi[PPREV][(int)HA_CLOSE], _time);
+      IndicatorSignal _signals = _indi.GetSignals(4, _shift);
       switch (_cmd) {
         case ORDER_TYPE_BUY:
-          _result &= _ohlc0.GetChangeInPct(true) > _level;
           _result &= _ohlc0.IsBull();
           _result &= _ohlc1.IsBear();
-          if (METHOD(_method, 0)) _result &= _ohlc2.IsBear();
-          if (METHOD(_method, 1)) _result &= _ohlc1.GetChangeInPct(true) > _level;
+          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
           break;
         case ORDER_TYPE_SELL:
-          _result &= _ohlc0.GetChangeInPct(true) < -_level;
           _result &= _ohlc0.IsBear();
           _result &= _ohlc1.IsBull();
-          if (METHOD(_method, 0)) _result &= _ohlc2.IsBull();
-          if (METHOD(_method, 1)) _result &= _ohlc1.GetChangeInPct(true) < -_level;
+          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
           break;
       }
-      Print(_indi.ToString());
     }
     return _result;
   }
