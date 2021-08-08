@@ -8,7 +8,7 @@ INPUT string __HeikenAshi_Parameters__ = "-- HeikenAshi strategy params --";  //
 INPUT float HeikenAshi_LotSize = 0;                                           // Lot size
 INPUT int HeikenAshi_SignalOpenMethod = 2;                                    // Signal open method (-127-127)
 INPUT float HeikenAshi_SignalOpenLevel = 0.0f;                                // Signal open level
-INPUT int HeikenAshi_SignalOpenFilterMethod = 32;                              // Signal open filter method
+INPUT int HeikenAshi_SignalOpenFilterMethod = 32;                             // Signal open filter method
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;                               // Signal open boost method
 INPUT int HeikenAshi_SignalCloseMethod = 2;                                   // Signal close method (-127-127)
 INPUT float HeikenAshi_SignalCloseLevel = 0.0f;                               // Signal close level
@@ -98,29 +98,30 @@ class Stg_HeikenAshi : public Strategy {
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Indi_HeikenAshi *_indi = GetIndicator();
-    bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
-    bool _result = _is_valid;
-    if (_is_valid) {
-      datetime _time = Chart().GetBarTime(_shift);
-      BarOHLC _ohlc0((float)_indi[CURR][(int)HA_OPEN], (float)_indi[CURR][(int)HA_HIGH],
-                     (float)_indi[CURR][(int)HA_LOW], (float)_indi[CURR][(int)HA_CLOSE], _time);
-      BarOHLC _ohlc1((float)_indi[PREV][(int)HA_OPEN], (float)_indi[PREV][(int)HA_HIGH],
-                     (float)_indi[PREV][(int)HA_LOW], (float)_indi[PREV][(int)HA_CLOSE], _time);
-      BarOHLC _ohlc2((float)_indi[PPREV][(int)HA_OPEN], (float)_indi[PPREV][(int)HA_HIGH],
-                     (float)_indi[PPREV][(int)HA_LOW], (float)_indi[PPREV][(int)HA_CLOSE], _time);
-      IndicatorSignal _signals = _indi.GetSignals(4, _shift);
-      switch (_cmd) {
-        case ORDER_TYPE_BUY:
-          _result &= _ohlc0.IsBull();
-          _result &= _ohlc1.IsBear();
-          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
-          break;
-        case ORDER_TYPE_SELL:
-          _result &= _ohlc0.IsBear();
-          _result &= _ohlc1.IsBull();
-          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
-          break;
-      }
+    bool _result = _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID);
+    if (!_result) {
+      // Returns false when indicator data is not valid.
+      return false;
+    }
+    datetime _time = Chart().GetBarTime(_shift);
+    BarOHLC _ohlc0((float)_indi[CURR][(int)HA_OPEN], (float)_indi[CURR][(int)HA_HIGH], (float)_indi[CURR][(int)HA_LOW],
+                   (float)_indi[CURR][(int)HA_CLOSE], _time);
+    BarOHLC _ohlc1((float)_indi[PREV][(int)HA_OPEN], (float)_indi[PREV][(int)HA_HIGH], (float)_indi[PREV][(int)HA_LOW],
+                   (float)_indi[PREV][(int)HA_CLOSE], _time);
+    BarOHLC _ohlc2((float)_indi[PPREV][(int)HA_OPEN], (float)_indi[PPREV][(int)HA_HIGH],
+                   (float)_indi[PPREV][(int)HA_LOW], (float)_indi[PPREV][(int)HA_CLOSE], _time);
+    IndicatorSignal _signals = _indi.GetSignals(4, _shift);
+    switch (_cmd) {
+      case ORDER_TYPE_BUY:
+        _result &= _ohlc0.IsBull();
+        _result &= _ohlc1.IsBear();
+        _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
+        break;
+      case ORDER_TYPE_SELL:
+        _result &= _ohlc0.IsBear();
+        _result &= _ohlc1.IsBull();
+        _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
+        break;
     }
     return _result;
   }
