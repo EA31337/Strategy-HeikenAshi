@@ -11,6 +11,7 @@ INPUT float HeikenAshi_SignalOpenLevel = 0.0f;     // Signal open level
 INPUT int HeikenAshi_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;    // Signal open boost method
 INPUT int HeikenAshi_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT int HeikenAshi_SignalCloseFilter = 0;        // Signal close filter (-127-127)
 INPUT float HeikenAshi_SignalCloseLevel = 0.0f;    // Signal close level
 INPUT int HeikenAshi_PriceStopMethod = 1;          // Price stop method
 INPUT float HeikenAshi_PriceStopLevel = 0;         // Price stop level
@@ -32,9 +33,10 @@ struct Indi_HeikenAshi_Params_Defaults : HeikenAshiParams {
 struct Stg_HeikenAshi_Params_Defaults : StgParams {
   Stg_HeikenAshi_Params_Defaults()
       : StgParams(::HeikenAshi_SignalOpenMethod, ::HeikenAshi_SignalOpenFilterMethod, ::HeikenAshi_SignalOpenLevel,
-                  ::HeikenAshi_SignalOpenBoostMethod, ::HeikenAshi_SignalCloseMethod, ::HeikenAshi_SignalCloseLevel,
-                  ::HeikenAshi_PriceStopMethod, ::HeikenAshi_PriceStopLevel, ::HeikenAshi_TickFilterMethod,
-                  ::HeikenAshi_MaxSpread, ::HeikenAshi_Shift, ::HeikenAshi_OrderCloseTime) {}
+                  ::HeikenAshi_SignalOpenBoostMethod, ::HeikenAshi_SignalCloseMethod, ::HeikenAshi_SignalCloseFilter,
+                  ::HeikenAshi_SignalCloseLevel, ::HeikenAshi_PriceStopMethod, ::HeikenAshi_PriceStopLevel,
+                  ::HeikenAshi_TickFilterMethod, ::HeikenAshi_MaxSpread, ::HeikenAshi_Shift,
+                  ::HeikenAshi_OrderCloseTime) {}
 } stg_ha_defaults;
 
 // Struct to define strategy parameters to override.
