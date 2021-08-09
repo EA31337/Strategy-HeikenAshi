@@ -14,7 +14,7 @@ struct Stg_HeikenAshi_Params_{{ Timeframe }} : StgParams {
   Stg_HeikenAshi_Params_{{ Timeframe }}() : StgParams(stg_ha_defaults) {
     lot_size = {{ HeikenAshi_LotSize | default(0) }};
     signal_open_method = {{ HeikenAshi_SignalOpenMethod | default(0) }};
-    signal_open_filter = {{ HeikenAshi_SignalOpenFilterMethod | default(1) }};
+    signal_open_filter_method = {{ HeikenAshi_SignalOpenFilterMethod | default(1) }};
     signal_open_level = (float){{ HeikenAshi_SignalOpenLevel | default(0) }};
     signal_open_boost = {{ HeikenAshi_SignalOpenBoostMethod | default(0) }};
     signal_close_method = {{ HeikenAshi_SignalCloseMethod | default(0) }};

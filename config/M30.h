@@ -14,7 +14,6 @@ struct Stg_HeikenAshi_Params_M30 : StgParams {
   Stg_HeikenAshi_Params_M30() : StgParams(stg_ha_defaults) {
     lot_size = 0;
     signal_open_method = 2;
-    signal_open_filter = 32;
     signal_open_level = (float)1;
     signal_open_boost = 0;
     signal_close_method = 2;
