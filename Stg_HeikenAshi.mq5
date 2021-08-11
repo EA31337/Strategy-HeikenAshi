@@ -7,6 +7,8 @@
 #include "config/define.h"
 
 // Includes EA31337 framework.
+#include <EA31337-classes/Pattern.struct.h>
+
 #include <EA31337-classes/EA.mqh>
 #include <EA31337-classes/Indicators/Indi_HeikenAshi.mqh>
 #include <EA31337-classes/Strategy.mqh>

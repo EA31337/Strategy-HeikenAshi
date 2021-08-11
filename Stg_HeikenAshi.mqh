@@ -6,15 +6,15 @@
 // User input params.
 INPUT_GROUP("HeikenAshi strategy: strategy params");
 INPUT float HeikenAshi_LotSize = 0;                // Lot size
-INPUT int HeikenAshi_SignalOpenMethod = 2;         // Signal open method (-127-127)
+INPUT int HeikenAshi_SignalOpenMethod = 0;         // Signal open method (-32-32)
 INPUT float HeikenAshi_SignalOpenLevel = 0.0f;     // Signal open level
 INPUT int HeikenAshi_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int HeikenAshi_SignalOpenFilterTime = 6;     // Signal open filter time
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;    // Signal open boost method
-INPUT int HeikenAshi_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT int HeikenAshi_SignalCloseMethod = 0;        // Signal close method (-32-32)
 INPUT int HeikenAshi_SignalCloseFilter = 0;        // Signal close filter (-127-127)
 INPUT float HeikenAshi_SignalCloseLevel = 0.0f;    // Signal close level
-INPUT int HeikenAshi_PriceStopMethod = 1;          // Price stop method
+INPUT int HeikenAshi_PriceStopMethod = 1;          // Price stop method (0-127)
 INPUT float HeikenAshi_PriceStopLevel = 0;         // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 1;         // Tick filter method
 INPUT float HeikenAshi_MaxSpread = 4.0;            // Max spread to trade (pips)
@@ -106,29 +106,38 @@ class Stg_HeikenAshi : public Strategy {
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Indi_HeikenAshi *_indi = GetIndicator();
-    bool _result = _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID);
+    bool _result =
+        _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift) && _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift + 1);
     if (!_result) {
       // Returns false when indicator data is not valid.
       return false;
     }
     datetime _time = Chart().GetBarTime(_shift);
-    BarOHLC _ohlc0((float)_indi[CURR][(int)HA_OPEN], (float)_indi[CURR][(int)HA_HIGH], (float)_indi[CURR][(int)HA_LOW],
-                   (float)_indi[CURR][(int)HA_CLOSE], _time);
-    BarOHLC _ohlc1((float)_indi[PREV][(int)HA_OPEN], (float)_indi[PREV][(int)HA_HIGH], (float)_indi[PREV][(int)HA_LOW],
-                   (float)_indi[PREV][(int)HA_CLOSE], _time);
-    BarOHLC _ohlc2((float)_indi[PPREV][(int)HA_OPEN], (float)_indi[PPREV][(int)HA_HIGH],
-                   (float)_indi[PPREV][(int)HA_LOW], (float)_indi[PPREV][(int)HA_CLOSE], _time);
-    IndicatorSignal _signals = _indi.GetSignals(4, _shift);
+    BarOHLC _ohlc[4];
+    _ohlc[0] = BarOHLC((float)_indi[_shift][(int)HA_OPEN], (float)_indi[_shift][(int)HA_HIGH],
+                       (float)_indi[_shift][(int)HA_LOW], (float)_indi[_shift][(int)HA_CLOSE], _time);
+    _ohlc[1] = BarOHLC((float)_indi[_shift + 1][(int)HA_OPEN], (float)_indi[_shift + 1][(int)HA_HIGH],
+                       (float)_indi[_shift + 1][(int)HA_LOW], (float)_indi[_shift + 1][(int)HA_CLOSE], _time);
+    _ohlc[2] = BarOHLC((float)_indi[_shift + 2][(int)HA_OPEN], (float)_indi[_shift + 2][(int)HA_HIGH],
+                       (float)_indi[_shift + 2][(int)HA_LOW], (float)_indi[_shift + 2][(int)HA_CLOSE], _time);
+    _ohlc[3] = BarOHLC((float)_indi[_shift + 3][(int)HA_OPEN], (float)_indi[_shift + 3][(int)HA_HIGH],
+                       (float)_indi[_shift + 3][(int)HA_LOW], (float)_indi[_shift + 3][(int)HA_CLOSE], _time);
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        _result &= _ohlc0.IsBull();
-        _result &= _ohlc1.IsBear();
-        _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
+        _result &= _method == 0 ? PatternCandle2::CheckPattern(PATTERN_2CANDLE_BULLS, _ohlc)
+                                : PatternCandle1::CheckPattern(PATTERN_1CANDLE_BULL, _ohlc[0]);
+        _result &=
+            _method > 0 ? PatternCandle3::CheckPattern((ENUM_PATTERN_3CANDLE)(1 << (_method - 1)), _ohlc) : _result;
+        _result &=
+            _method < 0 ? PatternCandle4::CheckPattern((ENUM_PATTERN_4CANDLE)(1 << -(_method + 1)), _ohlc) : _result;
         break;
       case ORDER_TYPE_SELL:
-        _result &= _ohlc0.IsBear();
-        _result &= _ohlc1.IsBull();
-        _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
+        _result &= _method == 0 ? PatternCandle2::CheckPattern(PATTERN_2CANDLE_BEARS, _ohlc)
+                                : PatternCandle1::CheckPattern(PATTERN_1CANDLE_BEAR, _ohlc[0]);
+        _result &=
+            _method > 0 ? PatternCandle3::CheckPattern((ENUM_PATTERN_3CANDLE)(1 << (_method - 1)), _ohlc) : _result;
+        _result &=
+            _method < 0 ? PatternCandle4::CheckPattern((ENUM_PATTERN_4CANDLE)(1 << -(_method + 1)), _ohlc) : _result;
         break;
     }
     return _result;
