@@ -6,14 +6,14 @@
 // User input params.
 INPUT_GROUP("HeikenAshi strategy: strategy params");
 INPUT float HeikenAshi_LotSize = 0;                // Lot size
-INPUT int HeikenAshi_SignalOpenMethod = 0;         // Signal open method (-32-32)
-INPUT float HeikenAshi_SignalOpenLevel = 0.0f;     // Signal open level
+INPUT int HeikenAshi_SignalOpenMethod = -9;        // Signal open method (-32-32)
+INPUT float HeikenAshi_SignalOpenLevel = 0.001f;   // Signal open level
 INPUT int HeikenAshi_SignalOpenFilterMethod = 32;  // Signal open filter method
-INPUT int HeikenAshi_SignalOpenFilterTime = 6;     // Signal open filter time
+INPUT int HeikenAshi_SignalOpenFilterTime = 8;     // Signal open filter time
 INPUT int HeikenAshi_SignalOpenBoostMethod = 0;    // Signal open boost method
-INPUT int HeikenAshi_SignalCloseMethod = 0;        // Signal close method (-32-32)
-INPUT int HeikenAshi_SignalCloseFilter = 0;        // Signal close filter (-127-127)
-INPUT float HeikenAshi_SignalCloseLevel = 0.0f;    // Signal close level
+INPUT int HeikenAshi_SignalCloseMethod = 4;        // Signal close method (-32-32)
+INPUT int HeikenAshi_SignalCloseFilter = 16;       // Signal close filter (-127-127)
+INPUT float HeikenAshi_SignalCloseLevel = 0.001f;  // Signal close level
 INPUT int HeikenAshi_PriceStopMethod = 1;          // Price stop method (0-127)
 INPUT float HeikenAshi_PriceStopLevel = 0;         // Price stop level
 INPUT int HeikenAshi_TickFilterMethod = 1;         // Tick filter method
@@ -21,7 +21,7 @@ INPUT float HeikenAshi_MaxSpread = 4.0;            // Max spread to trade (pips)
 INPUT short HeikenAshi_Shift = 0;                  // Shift (relative to the current bar, 0 - default)
 INPUT float HeikenAshi_OrderCloseLoss = 0;         // Order close loss
 INPUT float HeikenAshi_OrderCloseProfit = 0;       // Order close profit
-INPUT int HeikenAshi_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
+INPUT int HeikenAshi_OrderCloseTime = 0;           // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("HeikenAshi strategy: HeikenAshi indicator params");
 INPUT int HeikenAshi_Indi_HeikenAshi_Shift = 0;  // Shift
 
@@ -122,6 +122,7 @@ class Stg_HeikenAshi : public Strategy {
                        (float)_indi[_shift + 2][(int)HA_LOW], (float)_indi[_shift + 2][(int)HA_CLOSE], _time);
     _ohlc[3] = BarOHLC((float)_indi[_shift + 3][(int)HA_OPEN], (float)_indi[_shift + 3][(int)HA_HIGH],
                        (float)_indi[_shift + 3][(int)HA_LOW], (float)_indi[_shift + 3][(int)HA_CLOSE], _time);
+    _result &= _ohlc[0].GetRangeChangeInPct() > _level;
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         _result &= _method == 0 ? PatternCandle2::CheckPattern(PATTERN_2CANDLE_BULLS, _ohlc)
