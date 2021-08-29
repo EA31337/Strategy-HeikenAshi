@@ -39,6 +39,7 @@ struct Stg_HeikenAshi_Params_Defaults : StgParams {
                   ::HeikenAshi_SignalOpenBoostMethod, ::HeikenAshi_SignalCloseMethod, ::HeikenAshi_SignalCloseFilter,
                   ::HeikenAshi_SignalCloseLevel, ::HeikenAshi_PriceStopMethod, ::HeikenAshi_PriceStopLevel,
                   ::HeikenAshi_TickFilterMethod, ::HeikenAshi_MaxSpread, ::HeikenAshi_Shift) {
+    Set(STRAT_PARAM_LS, HeikenAshi_LotSize);
     Set(STRAT_PARAM_OCL, HeikenAshi_OrderCloseLoss);
     Set(STRAT_PARAM_OCP, HeikenAshi_OrderCloseProfit);
     Set(STRAT_PARAM_OCT, HeikenAshi_OrderCloseTime);
