@@ -72,7 +72,7 @@ class Stg_HeikenAshi : public Strategy {
   Stg_HeikenAshi(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
       : Strategy(_sparams, _tparams, _cparams, _name) {}
 
-  static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
+  static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
     StgParams _stg_params(stg_ha_defaults);
 #ifdef __config__
@@ -84,7 +84,7 @@ class Stg_HeikenAshi : public Strategy {
     _stg_params.SetIndicator(new Indi_HeikenAshi(_indi_params));
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
-    TradeParams _tparams(_magic_no, _log_level);
+    TradeParams _tparams;
     Strategy *_strat = new Stg_HeikenAshi(_stg_params, _tparams, _cparams, "HeikenAshi");
     return _strat;
   }
