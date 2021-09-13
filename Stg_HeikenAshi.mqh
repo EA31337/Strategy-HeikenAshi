@@ -30,7 +30,7 @@ INPUT int HeikenAshi_Indi_HeikenAshi_Shift = 0;  // Shift
 // Defines struct with default user indicator values.
 struct Indi_HeikenAshi_Params_Defaults : HeikenAshiParams {
   Indi_HeikenAshi_Params_Defaults() : HeikenAshiParams(::HeikenAshi_Indi_HeikenAshi_Shift) {}
-} indi_ha_defaults;
+};
 
 // Defines struct with default user strategy values.
 struct Stg_HeikenAshi_Params_Defaults : StgParams {
@@ -45,7 +45,7 @@ struct Stg_HeikenAshi_Params_Defaults : StgParams {
     Set(STRAT_PARAM_OCT, HeikenAshi_OrderCloseTime);
     Set(STRAT_PARAM_SOFT, HeikenAshi_SignalOpenFilterTime);
   }
-} stg_ha_defaults;
+};
 
 #ifdef __config__
 // Loads pair specific param values.
@@ -65,6 +65,8 @@ class Stg_HeikenAshi : public Strategy {
 
   static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
+    Indi_HeikenAshi_Params_Defaults indi_ha_defaults;
+    Stg_HeikenAshi_Params_Defaults stg_ha_defaults;
     StgParams _stg_params(stg_ha_defaults);
 #ifdef __config__
     SetParamsByTf<StgParams>(_stg_params, _tf, stg_ha_m1, stg_ha_m5, stg_ha_m15, stg_ha_m30, stg_ha_h1, stg_ha_h4,
