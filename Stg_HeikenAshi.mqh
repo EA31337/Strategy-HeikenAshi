@@ -47,16 +47,6 @@ struct Stg_HeikenAshi_Params_Defaults : StgParams {
   }
 } stg_ha_defaults;
 
-// Struct to define strategy parameters to override.
-struct Stg_HeikenAshi_Params : StgParams {
-  StgParams sparams;
-
-  // Struct constructors.
-  Stg_HeikenAshi_Params(HeikenAshiParams &_iparams, StgParams &_sparams) : sparams(stg_ha_defaults) {
-    sparams = _sparams;
-  }
-};
-
 #ifdef __config__
 // Loads pair specific param values.
 #include "config/H1.h"
