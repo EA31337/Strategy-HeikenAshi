@@ -66,6 +66,7 @@ class Stg_HeikenAshi : public Strategy {
   static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
     Indi_HeikenAshi_Params_Defaults indi_ha_defaults;
+    HeikenAshiParams _indi_params(indi_ha_defaults, _tf);
     Stg_HeikenAshi_Params_Defaults stg_ha_defaults;
     StgParams _stg_params(stg_ha_defaults);
 #ifdef __config__
@@ -73,7 +74,6 @@ class Stg_HeikenAshi : public Strategy {
                              stg_ha_h8);
 #endif
     // Initialize indicator.
-    HeikenAshiParams _indi_params(_tf);
     _stg_params.SetIndicator(new Indi_HeikenAshi(_indi_params));
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
