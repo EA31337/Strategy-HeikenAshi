@@ -4,8 +4,8 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_HeikenAshi_Params_H4 : HeikenAshiParams {
-  Indi_HeikenAshi_Params_H4() : HeikenAshiParams(indi_ha_defaults, PERIOD_H4) { shift = 0; }
+struct Indi_HeikenAshi_Params_H4 : IndiHeikenAshiParams {
+  Indi_HeikenAshi_Params_H4() : IndiHeikenAshiParams(indi_ha_defaults, PERIOD_H4) { shift = 0; }
 } indi_ha_h4;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
