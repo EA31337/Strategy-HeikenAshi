@@ -26,12 +26,6 @@ INPUT_GROUP("HeikenAshi strategy: HeikenAshi indicator params");
 INPUT int HeikenAshi_Indi_HeikenAshi_Shift = 0;  // Shift
 
 // Structs.
-
-// Defines struct with default user indicator values.
-struct Indi_HeikenAshi_Params_Defaults : IndiHeikenAshiParams {
-  Indi_HeikenAshi_Params_Defaults() : IndiHeikenAshiParams(::HeikenAshi_Indi_HeikenAshi_Shift) {}
-};
-
 // Defines struct with default user strategy values.
 struct Stg_HeikenAshi_Params_Defaults : StgParams {
   Stg_HeikenAshi_Params_Defaults()
@@ -97,8 +91,8 @@ class Stg_HeikenAshi : public Strategy {
    * Event on strategy's init.
    */
   void OnInit() {
-    Indi_HeikenAshi_Params_Defaults indi_ha_defaults;
-    IndiHeikenAshiParams _indi_params(indi_ha_defaults, Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
+    IndiHeikenAshiParams _indi_params(::HeikenAshi_Indi_HeikenAshi_Shift);
+    _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
     SetIndicator(new Indi_HeikenAshi(_indi_params));
   }
 
