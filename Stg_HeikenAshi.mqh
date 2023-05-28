@@ -57,7 +57,7 @@ class Stg_HeikenAshi : public Strategy {
   Stg_HeikenAshi(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
       : Strategy(_sparams, _tparams, _cparams, _name) {}
 
-  static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL) {
+  static Stg_HeikenAshi *Init(ENUM_TIMEFRAMES _tf = NULL, EA* _ea = NULL) {
     // Initialize strategy initial values.
     Stg_HeikenAshi_Params_Defaults stg_ha_defaults;
     StgParams _stg_params(stg_ha_defaults);
