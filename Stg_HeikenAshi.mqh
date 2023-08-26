@@ -101,22 +101,23 @@ class Stg_HeikenAshi : public Strategy {
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Indi_HeikenAshi *_indi = GetIndicator();
+    int _ishift = _shift + ::HeikenAshi_Indi_HeikenAshi_Shift;
     bool _result =
-        _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift) && _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift + 1);
+        _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _ishift) && _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _ishift + 1);
     if (!_result) {
       // Returns false when indicator data is not valid.
       return false;
     }
-    datetime _time = Chart().GetBarTime(_shift);
+    datetime _time = Chart().GetBarTime(_ishift);
     BarOHLC _ohlc[4];
-    _ohlc[0] = BarOHLC((float)_indi[_shift][(int)HA_OPEN], (float)_indi[_shift][(int)HA_HIGH],
-                       (float)_indi[_shift][(int)HA_LOW], (float)_indi[_shift][(int)HA_CLOSE], _time);
-    _ohlc[1] = BarOHLC((float)_indi[_shift + 1][(int)HA_OPEN], (float)_indi[_shift + 1][(int)HA_HIGH],
-                       (float)_indi[_shift + 1][(int)HA_LOW], (float)_indi[_shift + 1][(int)HA_CLOSE], _time);
-    _ohlc[2] = BarOHLC((float)_indi[_shift + 2][(int)HA_OPEN], (float)_indi[_shift + 2][(int)HA_HIGH],
-                       (float)_indi[_shift + 2][(int)HA_LOW], (float)_indi[_shift + 2][(int)HA_CLOSE], _time);
-    _ohlc[3] = BarOHLC((float)_indi[_shift + 3][(int)HA_OPEN], (float)_indi[_shift + 3][(int)HA_HIGH],
-                       (float)_indi[_shift + 3][(int)HA_LOW], (float)_indi[_shift + 3][(int)HA_CLOSE], _time);
+    _ohlc[0] = BarOHLC((float)_indi[_ishift][(int)HA_OPEN], (float)_indi[_ishift][(int)HA_HIGH],
+                       (float)_indi[_ishift][(int)HA_LOW], (float)_indi[_ishift][(int)HA_CLOSE], _time);
+    _ohlc[1] = BarOHLC((float)_indi[_ishift + 1][(int)HA_OPEN], (float)_indi[_ishift + 1][(int)HA_HIGH],
+                       (float)_indi[_ishift + 1][(int)HA_LOW], (float)_indi[_ishift + 1][(int)HA_CLOSE], _time);
+    _ohlc[2] = BarOHLC((float)_indi[_ishift + 2][(int)HA_OPEN], (float)_indi[_ishift + 2][(int)HA_HIGH],
+                       (float)_indi[_ishift + 2][(int)HA_LOW], (float)_indi[_ishift + 2][(int)HA_CLOSE], _time);
+    _ohlc[3] = BarOHLC((float)_indi[_ishift + 3][(int)HA_OPEN], (float)_indi[_ishift + 3][(int)HA_HIGH],
+                       (float)_indi[_ishift + 3][(int)HA_LOW], (float)_indi[_ishift + 3][(int)HA_CLOSE], _time);
     _result &= _ohlc[0].GetRangeChangeInPct() > _level;
     switch (_cmd) {
       case ORDER_TYPE_BUY:
